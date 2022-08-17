@@ -1,6 +1,8 @@
 # Storeme
 **Storeme** is ASP.NET Core web application simulating e-commerce site including the process from managing the store with an admin account to ordering products as a user, while the guests can browse the products, but need to create an account if they want to use more features like cart, wishlist or order functionality.
 
+**Note this is the initial commit of the app and some validations, if checks and some small details are yet to be added.** <br/>
+
 **Some views**  </br>
 <img src="https://im5.ezgif.com/tmp/ezgif-5-518643460b.gif" width="800" height="475" />
 
