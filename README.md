@@ -25,7 +25,7 @@
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "DefaultConnection": "Server=.;Database=Storeme;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=Server=(localdb)\mssqllocaldb;Database=Storeme;Trusted_Connection=True;MultipleActiveResultSets=true"
   }
 }
 ```
