@@ -39,6 +39,7 @@ update-database
 - C#
 - .NET Core 6.0
 - Entity Framework Core
+- SQL
 - Bootstrap 5.2
 - HTML
 - CSS
