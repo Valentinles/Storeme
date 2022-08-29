@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Storeme.Common;
 using Storeme.Services.Contracts;
 using Storeme.Web.Models;
 using Storeme.Web.Models.Wishlist;
@@ -25,23 +26,23 @@ namespace Storeme.Web.Controllers
             var result = await this.wishlistService.AddItemToWishlist(model.ProductId, this.User.Identity.Name);
             if (result)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(Constants.Actions.MyWishlist, Constants.Controllers.Wishlist);
             }
-            return RedirectToAction("StoremeError", "Home",
-                new StoremeErrorViewModel() { Message = "Item already exists in your wishlist, if not please try again. Thank you!" });
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.WishlistError });
         }
 
         [HttpPost]
-        [ActionName("AddToWishlistDetails")]
+        [ActionName(Constants.Actions.AddToWishlistDetails)]
         public async Task<IActionResult> AddToWishlist(int id)
         {
             var result = await this.wishlistService.AddItemToWishlist(id, this.User.Identity.Name);
             if (result)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(Constants.Actions.MyWishlist, Constants.Controllers.Wishlist);
             }
-            return RedirectToAction("StoremeError", "Home",
-                 new StoremeErrorViewModel() { Message = "Item already exists in your wishlist, if not please try again. Thank you!" });
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.WishlistError });
         }
 
         [HttpPost]
@@ -50,9 +51,10 @@ namespace Storeme.Web.Controllers
             var result = await this.wishlistService.RemoveItemFromWishlist(model.ProductId, this.User.Identity.Name);
             if (result)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(Constants.Actions.MyWishlist, Constants.Controllers.Wishlist);
             }
-            return RedirectToAction("Privacy", "Home");
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.BasicError });
         }
 
         [HttpGet]

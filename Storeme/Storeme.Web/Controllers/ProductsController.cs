@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Storeme.Common;
 using Storeme.Entities;
 using Storeme.Services.Contracts;
+using Storeme.Web.Models;
 using Storeme.Web.Models.Category;
 using Storeme.Web.Models.Product;
 
@@ -30,7 +32,8 @@ namespace Storeme.Web.Controllers
             var categories = (await this.categoryService.GetCategories())
                 .Select(mapper.Map<CategoryListingViewModel>);
 
-            ViewData["Categories"] = new SelectList(categories, "Title", "Title");
+            ViewData[Constants.ViewData.Categories] = new SelectList(
+                categories, Constants.ViewData.Id, Constants.ViewData.Title);
 
             var result = mapper.Map<IEnumerable<ProductListingViewModel>>(products);
 
@@ -38,20 +41,21 @@ namespace Storeme.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.Roles.Admin)]
         public async Task<IActionResult> Add()
         {
             var categories = (await this.categoryService.GetCategories())
                 .Select(mapper.Map<CategoryListingViewModel>);
 
-            ViewData["Categories"] = new SelectList(categories, "Id", "Title");
+            ViewData[Constants.ViewData.Categories] = new SelectList(
+                categories, Constants.ViewData.Id, Constants.ViewData.Title);
 
             return this.View();
 
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.Roles.Admin)]
         public async Task<IActionResult> Add(ProductBindingModel model)
         {
 
@@ -59,29 +63,31 @@ namespace Storeme.Web.Controllers
 
             if (await this.productService.CreateProduct(product))
             {
-                return RedirectToAction("All", "Products");
+                return RedirectToAction(Constants.Actions.AllProducts, Constants.Controllers.Products);
             }
 
-            return RedirectToAction("Privacy", "Home");
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.BasicError });
 
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.Roles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
 
             if (await this.productService.DeleteProduct(id))
             {
-                return RedirectToAction("All", "Products");
+                return RedirectToAction(Constants.Actions.AllProducts, Constants.Controllers.Products);
             }
 
-            return RedirectToAction("Privacy", "Home");
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.BasicError });
 
         }
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.Roles.Admin)]
         public async Task<IActionResult> Update(int id)
         {
 
@@ -92,21 +98,23 @@ namespace Storeme.Web.Controllers
             var categories = (await this.categoryService.GetCategories())
                 .Select(mapper.Map<CategoryListingViewModel>);
 
-            ViewData["Categories"] = new SelectList(categories, "Id", "Title");
+            ViewData[Constants.ViewData.Categories] = new SelectList(
+                categories, Constants.ViewData.Id, Constants.ViewData.Title);
 
             return this.View(result);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.Roles.Admin)]
         public async Task<IActionResult> Update(int id, ProductUpdateModel model)
         {
             var product = mapper.Map<ProductUpdateModel, Product>(model);
             if (await this.productService.UpdateProduct(product))
             {
-                return RedirectToAction("All", "Products");
+                return RedirectToAction(Constants.Actions.AllProducts, Constants.Controllers.Products);
             }
-            return RedirectToAction("Privacy", "Home");
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.BasicError });
         }
 
         [HttpGet]
@@ -114,6 +122,11 @@ namespace Storeme.Web.Controllers
         {
 
             var product = await this.productService.GetProduct(id);
+            if (product == null)
+            {
+                return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.BasicError });
+            }
 
             var result = mapper.Map<ProductDetailsViewModel>(product);
 

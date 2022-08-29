@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Storeme.Common;
 using Storeme.Services.Contracts;
 using Storeme.Web.Models;
 using Storeme.Web.Models.Cart;
@@ -26,23 +27,23 @@ namespace Storeme.Web.Controllers
             var result = await this.cartService.AddItemToCart(model.ProductId, this.User.Identity.Name);
             if (result)
             {
-                return RedirectToAction("MyCart", "Cart");
+                return RedirectToAction(Constants.Actions.MyCart, Constants.Controllers.Cart);
             }
-            return RedirectToAction("StoremeError", "Home",
-                new StoremeErrorViewModel() { Message = "Item already exists in your cart, if not please try again. Thank you!" });
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.CartError });
         }
 
         [HttpPost]
-        [ActionName("AddToCartDetails")]
+        [ActionName(Constants.Actions.AddToCartDetails)]
         public async Task<IActionResult> AddToCart(int id)
         {
             var result = await this.cartService.AddItemToCart(id, this.User.Identity.Name);
             if (result)
             {
-                return RedirectToAction("MyCart", "Cart");
+                return RedirectToAction(Constants.Actions.MyCart, Constants.Controllers.Cart);
             }
-            return RedirectToAction("StoremeError", "Home",
-                new StoremeErrorViewModel() { Message = "Item already exists in your cart, if not please try again. Thank you!" });
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.CartError });
         }
 
         [HttpPost]
@@ -51,9 +52,10 @@ namespace Storeme.Web.Controllers
             var result = await this.cartService.RemoveItemFromCart(model.ProductId, this.User.Identity.Name);
             if (result)
             {
-                return RedirectToAction("MyCart", "Cart");
+                return RedirectToAction(Constants.Actions.MyCart, Constants.Controllers.Cart);
             }
-            return RedirectToAction("Privacy", "Home");
+            return RedirectToAction(Constants.Actions.StoremeError, Constants.Controllers.Home,
+                new StoremeErrorViewModel() { Message = Constants.ErrorMessages.BasicError });
         }
 
         [HttpGet]

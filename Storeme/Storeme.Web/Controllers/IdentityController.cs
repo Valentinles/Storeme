@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Storeme.Common;
 using Storeme.Entities;
 using Storeme.Services.Contracts;
 using Storeme.Web.Models.Identity;
@@ -56,7 +57,7 @@ namespace Storeme.Web.Controllers
                 var wishlist = await this.wishlistService.CreateWishlist(user.Id);
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(Constants.Actions.Index, Constants.Controllers.Home);
             }
             foreach (var error in result.Errors)
             {
@@ -69,7 +70,7 @@ namespace Storeme.Web.Controllers
         }
 
         [HttpGet]
-        [Route("/Identity/Login")]
+        [Route(Constants.Routes.Login)]
         //[Route("/Identity/Account/Login")]
         public IActionResult Login()
         {
@@ -86,11 +87,11 @@ namespace Storeme.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(input.Username, input.Password, true, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction(Constants.Actions.Index, Constants.Controllers.Home);
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, Constants.ErrorMessages.LoginError);
                     return this.View();
                 }
             }
@@ -102,7 +103,7 @@ namespace Storeme.Web.Controllers
         {
             await _signInManager.SignOutAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(Constants.Actions.Index, Constants.Controllers.Home);
 
         }
         private StoremeUser CreateUser()
@@ -129,7 +130,7 @@ namespace Storeme.Web.Controllers
         }
 
         [HttpGet]
-        [Route("/Identity/Account/AccessDenied")]
+        [Route(Constants.Routes.AccessDenied)]
         public ActionResult AccessDenied()
         {
             return View();

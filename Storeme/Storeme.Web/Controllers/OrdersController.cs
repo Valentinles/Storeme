@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Storeme.Common;
 using Storeme.Services.Contracts;
 using Storeme.Web.Models.Cart;
 using Storeme.Web.Models.Identity;
@@ -34,7 +35,7 @@ namespace Storeme.Web.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Constants.Roles.Admin)]
         public async Task<IActionResult> All()
         {
             var orders = await this.orderService.GetAllOrders();
@@ -71,7 +72,7 @@ namespace Storeme.Web.Controllers
         public async Task<IActionResult> Create(int num)
         {
             var makeOrder = await this.orderService.CreateOrder(this.User.Identity.Name);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(Constants.Actions.Index, Constants.Controllers.Home);
         }
     }
 }
