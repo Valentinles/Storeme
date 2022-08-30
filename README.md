@@ -4,7 +4,7 @@
 **Note this is the initial commit of the app and some validations, if checks and some small details are yet to be added.** <br/>
 
 **Some views**  </br>
-<img src="https://im5.ezgif.com/tmp/ezgif-5-518643460b.gif" width="800" height="475" />
+<img src="https://i.postimg.cc/0jFVftNm/ezgif-com-gif-maker.gif" width="800" height="475" />
 
 
 **Admin account**: </br>
